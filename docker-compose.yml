@@ -1,17 +1,22 @@
-version: '3.8'
 services:
   postgres:
-    image: postgres:13
-    container_name: postgres_gestion_giras
+    image: postgres:16
+    container_name: postgres_gestion_usuarios_victimas
     environment:
-      POSTGRES_DB: gestion_giras
+      POSTGRES_DB: db_gestion_usuarios_victimas
       POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin123
+      POSTGRES_PASSWORD: gestion72
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-        - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d db_gestion_usuarios_victimas"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:
